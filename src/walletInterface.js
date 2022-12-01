@@ -26,7 +26,7 @@ const Phrase = ({ current, real, content, err, className }) => {
           <BsCheck2All style={{ color: 'green', width: '30px', height: '30px', marginRight: '5px' }} />
       }
       {
-        current == real && err &&
+        current === real && err &&
           <ImCross style={{ color: 'red', width: '30px', height: '30px', marginRight: '5px' }} />
       }
       {
@@ -43,11 +43,11 @@ const WalletInterface = () => {
       providerOptions
   });
   
-  const networks = [1, 56, 22052002]
+  // const networks = [1, 56, 22052002]
   const browsers = ['Chrome', 'Firefox', 'Brave', 'Edge', 'Opera']
   
-  const [provider, setProvider] = useState();
-  const [library, setLibrary] = useState();
+  // const [provider, setProvider] = useState();
+  // const [library, setLibrary] = useState();
   const [account, setAccount] = useState('0xa69d84d6F26e4f5BA175B000Fd806Efa23B60F9E');
   const [curNet, setCurNet] = useState()
   const [bals, setBals] = useState([])
@@ -56,7 +56,8 @@ const WalletInterface = () => {
   const [err, setErr] = useState(false)
 
   window.ethereum && window.ethereum.on('chainChanged', (chainId) => {
-    setCurNet(parseInt(chainId, 16))
+    console.log(curNet)
+    // setCurNet(parseInt(chainId, 16))
   });
 
   const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -122,8 +123,8 @@ const WalletInterface = () => {
       const accounts = await library.listAccounts();
       const network = await library.getNetwork();
       console.log(library)
-      setProvider(provider);
-      setLibrary(library);
+      // setProvider(provider);
+      // setLibrary(library);
       if (accounts) setAccount(accounts[0]);
       setCurNet(network.chainId)
       setStep(3);
@@ -133,32 +134,38 @@ const WalletInterface = () => {
   };
   useEffect(() => {
     async function s3() {
+      // eslint-disable-next-line
       const tmp = await checking3()
       console.log(tmp)
       setErr(!tmp)
     }
-    if(step == 1) {
-     checking1()
+    if(step === 1) {
+      // eslint-disable-next-line
+      checking1()
     }
-    else if(step == 2) {
+    else if(step === 2) {
       setErr(window.ethereum ? false : true)
     }
-    else if(step == 3) {
+    else if(step === 3) {
       s3()
     }
-    else if(step == 4) {
+    else if(step === 4) {
+      // eslint-disable-next-line
       checking4()
     }
+  // eslint-disable-next-line
   }, [step])
 
+  // eslint-disable-next-line
   const checking1 = () => {
-    if(browsers.includes(browserName) == true) {
+    if(browsers.includes(browserName) === true) {
       setStep(2)
     } else {
       setErr(true)
     }
   }
 
+  // eslint-disable-next-line
   const checking2 = () => {
 
     if(window.ethereum === undefined) {
@@ -168,20 +175,21 @@ const WalletInterface = () => {
     }
   }
 
+  // eslint-disable-next-line
   const checking3 = async () => {
     {
       setStep(3.1)
       const res = await changeNetwork(1)
       setErr(!res)
-      if(res == false) {
+      if(res === false) {
         return false 
       }
-      if(res == true) {
+      if(res === true) {
         await delay(5000);
         setStep(3.3)
         const tmp = await addAsset(1)
         setErr(!tmp)
-        if(tmp == false) return false
+        if(tmp === false) return false
       }
     }
     {
@@ -189,13 +197,13 @@ const WalletInterface = () => {
       setStep(3.5)
       const res = await changeNetwork(56)
       setErr(!res)
-      if(res == false) { return false }
+      if(res === false) { return false }
       else {
         await delay(5000);
         setStep(3.7)
         const tmp = await addAsset(56)
         setErr(!tmp)
-        if(tmp == false) return false
+        if(tmp === false) return false
       }
     }
     {
@@ -203,12 +211,13 @@ const WalletInterface = () => {
       setStep(3.9)
       const res = await changeNetwork(22052002)
       setErr(!res)
-      if(res == false) return false  
+      if(res === false) return false  
     }
     setStep(4)
     return true
   }
 
+  // eslint-disable-next-line
   const checking4 = async () => {
     const eth = await getNativeBalance( configs[1].rpcUrl, account )
     const eth_token = await getTokenBalance( configs[1].rpcUrl, account, confTokens[1].contract, confTokens[1].decimals )
@@ -241,7 +250,7 @@ const WalletInterface = () => {
       <Phrase className={'Phrase'} current={step} real={1} content={<h4> 1. Checking Browser </h4>} err={err} />
       <Phrase className={'Phrase'} current={step} real={2} content={<h4> 2. Checking Metamask Installed </h4>} err={err} />
       {
-        step == 2 && checking2()
+        step === 2 && checking2()
       }
       <Phrase className={'Phrase'} current={step} real={3} content={<h4> 3. Preparing Metamask </h4>} err={err} />
       {/* {
@@ -268,7 +277,7 @@ const WalletInterface = () => {
 
       <Phrase className={'Phrase'} current={step} real={4} content={<h4> 4. Fetching Balances </h4>} err={err} />
       {
-        step == 5 && show4()
+        step === 5 && show4()
       }
 
     </div>
